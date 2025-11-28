@@ -1,0 +1,334 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Your House Price Prediction - {{ location }}</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800;900&family=Playfair+Display:wght@700;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <style>
+        :root {
+            --primary: #6366f1;
+            --gradient-1: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            --gradient-2: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+            --text: #1e293b;
+            --light: #f8fafc;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Inter', sans-serif;
+            background: var(--gradient-1);
+            min-height: 100vh;
+            color: var(--text);
+            overflow-x: hidden;
+        }
+
+        .hero-header {
+            text-align: center;
+            padding: 80px 20px 60px;
+            color: white;
+        }
+
+        .hero-header i {
+            font-size: 5rem;
+            margin-bottom: 20px;
+            opacity: 0.9;
+        }
+
+        .hero-header h1 {
+            font-family: 'Playfair Display', serif;
+            font-size: 4.5rem;
+            font-weight: 900;
+            margin-bottom: 16px;
+            text-shadow: 0 10px 30px rgba(0,0,0,0.3);
+        }
+
+        .hero-header p {
+            font-size: 1.6rem;
+            opacity: 0.95;
+            font-weight: 500;
+        }
+
+        .location-badge {
+            display: inline-block;
+            background: rgba(255,255,255,0.25);
+            padding: 12px 32px;
+            border-radius: 50px;
+            font-size: 1.4rem;
+            font-weight: 700;
+            backdrop-filter: blur(10px);
+            margin-top: 20px;
+            border: 2px solid rgba(255,255,255,0.3);
+        }
+
+        .main-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 40px 20px;
+        }
+
+        .price-card {
+            background: white;
+            border-radius: 32px;
+            padding: 60px 40px;
+            text-align: center;
+            box-shadow: 0 30px 80px rgba(0,0,0,0.2);
+            margin-bottom: 50px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .price-card::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0;
+            height: 8px;
+            background: var(--gradient-2);
+        }
+
+        .current-price-label {
+            font-size: 2rem;
+            color: #64748b;
+            font-weight: 600;
+            margin-bottom: 20px;
+            letter-spacing: 2px;
+        }
+
+        .current-price {
+            font-family: 'Playfair Display', serif;
+            font-size: 7rem;
+            font-weight: 900;
+            background: var(--gradient-1);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+            line-height: 1;
+            margin: 20px 0;
+        }
+
+        .price-unit {
+            font-size: 2.5rem;
+            color: #475569;
+            font-weight: 600;
+        }
+
+        .details-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 25px;
+            margin: 50px 0;
+            padding: 0 40px;
+        }
+
+        .detail-item {
+            background: #f8fafc;
+            padding: 25px;
+            border-radius: 20px;
+            text-align: center;
+            border: 2px solid #e2e8f0;
+        }
+
+        .detail-item i {
+            font-size: 2.5rem;
+            color: var(--primary);
+            margin-bottom: 15px;
+        }
+
+        .detail-item h3 {
+            font-size: 1.1rem;
+            color: #64748b;
+            margin-bottom: 8px;
+        }
+
+        .detail-item p {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #1e293b;
+        }
+
+        .forecast-section {
+            background: white;
+            border-radius: 32px;
+            padding: 60px 40px;
+            margin: 50px 0;
+            text-align: center;
+            box-shadow: 0 30px 80px rgba(0,0,0,0.15);
+        }
+
+        .forecast-title {
+            font-family: 'Playfair Display', serif;
+            font-size: 3rem;
+            margin-bottom: 20px;
+            color: #1e293b;
+        }
+
+        .growth-badge {
+            display: inline-block;
+            background: #10b981;
+            color: white;
+            padding: 10px 30px;
+            border-radius: 50px;
+            font-size: 1.3rem;
+            font-weight: 700;
+            margin-bottom: 40px;
+        }
+
+        .forecast-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 25px;
+            max-width: 1000px;
+            margin: 0 auto 50px;
+        }
+
+        .forecast-card {
+            background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%);
+            padding: 30px 20px;
+            border-radius: 24px;
+            border: 3px solid #0ea5e9;
+            transition: all 0.3s ease;
+        }
+
+        .forecast-card:hover {
+            transform: translateY(-15px) scale(1.05);
+            box-shadow: 0 20px 40px rgba(14,165,233,0.3);
+        }
+
+        .forecast-year {
+            font-size: 1.8rem;
+            font-weight: 800;
+            color: #0369a1;
+        }
+
+        .forecast-price {
+            font-size: 2rem;
+            font-weight: 900;
+            color: #0c4a6e;
+            margin-top: 10px;
+        }
+
+        .trend-graph {
+            width: 100%;
+            max-width: 900px;
+            margin: 60px auto;
+            border-radius: 24px;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.2);
+            border: 8px solid white;
+        }
+
+        .action-buttons {
+            text-align: center;
+            margin: 60px 0;
+        }
+
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 12px;
+            padding: 18px 40px;
+            margin: 0 15px;
+            border-radius: 16px;
+            font-size: 1.3rem;
+            font-weight: 700;
+            text-decoration: none;
+            transition: all 0.4s ease;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+
+        .btn-primary {
+            background: var(--gradient-1);
+            color: white;
+        }
+
+        .btn-secondary {
+            background: white;
+            color: #667eea;
+            border: 3px solid #667eea;
+        }
+
+        .btn:hover {
+            transform: translateY(-8px) scale(1.05);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.3);
+        }
+
+        @media (max-width: 768px) {
+            .hero-header h1 { font-size: 3rem; }
+            .hero-header p { font-size: 1.3rem; }
+            .current-price { font-size: 5rem; }
+            .price-card, .forecast-section { padding: 40px 20px; }
+            .forecast-grid { grid-template-columns: 1fr 1fr; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="hero-header">
+        <i class="fas fa-home"></i>
+        <h1>₹{{ "{:,}".format(price) }}</h1>
+        <p>Your Estimated House Price in</p>
+        <div class="location-badge">{{ location }}</div>
+    </div>
+
+    <div class="main-container">
+
+        <!-- Current Price Card -->
+        <div class="price-card">
+            <div class="current-price-label">CURRENT MARKET VALUE (2025)</div>
+            <div class="current-price">₹{{ "{:,}".format(price) }}</div>
+            <div class="price-unit">Indian Rupees</div>
+
+            <div class="details-grid">
+                <div class="detail-item">
+                    <i class="fas fa-ruler-combined"></i>
+                    <h3>Area</h3>
+                    <p>{{ area }} sq ft</p>
+                </div>
+                <div class="detail-item">
+                    <i class="fas fa-chart-line"></i>
+                    <h3>Annual Growth</h3>
+                    <p>{{ "%.1f"|format(growth_rate) }}%</p>
+                </div>
+                <div class="detail-item">
+                    <i class="fas fa-city"></i>
+                    <h3>City Tier</h3>
+                    <p>{% if location in ['Mumbai','Delhi','Bangalore'] %}Tier 1{% else %}Tier 2{% endif %}</p>
+                </div>
+                <div class="detail-item">
+                    <i class="fas fa-calendar-alt"></i>
+                    <h3>Prediction Date</h3>
+                    <p>November 2025</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Future Forecast Section -->
+        <div class="forecast-section">
+            <h2 class="forecast-title">5-Year Price Forecast</h2>
+            <div class="growth-badge">+{{ "%.1f"|format(growth_rate) }}% Annual Growth</div>
+
+            <div class="forecast-grid">
+                {% for year, fprice in future_prices %}
+                <div class="forecast-card">
+                    <div class="  class="forecast-year">{{ year }}</div>
+                    <div class="forecast-price">₹{{ "{:,}".format(fprice) }}</div>
+                </div>
+                {% endfor %}
+            </div>
+
+            <img src="/static/graphs/future_trend.png" alt="5-Year Price Trend Graph" class="trend-graph">
+        </div>
+
+        <!-- Action Buttons -->
+        <div class="action-buttons">
+            <a href="/" class="btn btn-primary">
+                <i class="fas fa-search"></i> New Prediction
+            </a>
+            <a href="/graphs" class="btn btn-secondary">
+                <i class="fas fa-chart-bar"></i> View All Graphs
+            </a>
+        </div>
+    </div>
+
+</body>
+</html>
